@@ -19,7 +19,7 @@ An SQL based app that is used to keep track of general employee information.
 To install dependencies run the following command: 
 
 ```
-npm i - **to be edited
+npm i - npm i inquirer - **to be edited
 ```
 
 ## Usage 
