@@ -1,33 +1,34 @@
 const inquirer = require('inquirer'); // inquirer package 
-// const fs = require('fs'); // file system package
 console.log("Welcome to the employee tracker app, answer all prompts to continue");
 
 const questions = [
     // name of project 
     {
         type: 'input',
-        name: 'title',
-        message: "What would you like to name your project?"
+        name: ' ',
+        // message: ' employee?????',
 
     },
     // description of project
     {
         type: 'input',
-        name: 'description',
-        message: 'please provide a description of your project',
+        name: ' ',
+        // message: ' employee salary?????',
+
     },
     // Installation
     {
         type: 'input',
-        name: 'installation',
-        message: 'What command should be run to install needed dependencies',
-        default: 'npm i'
+        name: ' ',
+        // message: ' employee role?????
+
     },
     // usage of project
     {
         type: 'input',
-        name: 'usage',
-        message: 'Please provide a description of the uses/use cases of your project',
+        name: ' ',
+        // message: ' employee department?????
+
     },
     // license for project
     {
