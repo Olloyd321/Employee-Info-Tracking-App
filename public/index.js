@@ -4,15 +4,15 @@ console.log("Welcome to the employee tracker app, answer all prompts to continue
 const inquirer = require('inquirer');
 const mysql = require('mysql');
 
-// Create a connection to the MySQL database
-const connection = mysql.createConnection({
+// connect to sql?
+const connection = mysql.myNewDb({
   host: 'localhost',
   user: 'root',
-  password: 'password',
+  password: 'MyNewDb',
   database: 'employee_tracker_db',
 });
 
-// Connect to the database
+// Connect to the db
 connection.connect((err) => {
   if (err) throw err;
  });
@@ -117,18 +117,18 @@ function viewEmployeesByManager() {
   );
 }
 
-// Function to add a new employee
-// function addEmployee() {
-//   inquirer
-//     .prompt([
-//       {
-//         type: 'input',
-//         name: 'first_name',
-//         message: "",
-//       }])};
+// add a new employee
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'first_name',
+        message: "",
+      }])};
 
-// function writeToFile(fileName, data) {
-//     return fs.writeFileSync (path.join (process.cwd(), fileName), data);  
+function writeToFile(fileName, data) {
+    return fs.writeFileSync (path.join (process.cwd(), fileName), data);  
 
 // }
 
@@ -141,5 +141,5 @@ function init() {
 };
 
 
-// Function call to initialize app
+// initialize app
 init();
