@@ -1,88 +1,145 @@
 const inquirer = require('inquirer'); // inquirer package 
 console.log("Welcome to the employee tracker app, answer all prompts to continue");
 
-const questions = [
-    // name of project 
-    {
-        type: 'input',
-        name: ' ',
-        // message: ' employee?????',
+const inquirer = require('inquirer');
+const mysql = require('mysql');
 
-    },
-    // description of project
-    {
-        type: 'input',
-        name: ' ',
-        // message: ' employee salary?????',
+// Create a connection to the MySQL database
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'password',
+  database: 'employee_tracker_db',
+});
 
-    },
-    // Installation
-    {
-        type: 'input',
-        name: ' ',
-        // message: ' employee role?????
+// Connect to the database
+connection.connect((err) => {
+  if (err) throw err;
+ });
 
-    },
-    // usage of project
-    {
-        type: 'input',
-        name: ' ',
-        // message: ' employee department?????
-
-    },
-    // license for project
-    {
+// Main function that displays the menu and handles user input
+function main() {
+  inquirer
+    .prompt([
+      {
         type: 'list',
-        name: 'license',
-        message:'Please select a license for your project',
-        choices: licenses,
-    },
-    // contributing
-    {
-        type: 'input',
-        name: 'contributing',   
-        message:'Please list any contribution guidelines'
-    },
-    // Tests
-    {
-        type: 'input',
-        name: 'tests',
-        message: 'What command should be run to perform tests?',
-        default: 'npm test'
-    },
-    // github username 
-    {
-        type: 'input',
-        name: 'githubUserName',
-        message:'Please enter your github user name'
-
-    },
-    // user email 
-    {
-        type: 'input',
-        name: 'UserEmail',
-        message:'Please enter your email address, or skip and the user will be directed to your github'
-
-    },
-
-];
-
-// TODO: Create a function to write README file
-function writeToFile(fileName, data) {
-    return fs.writeFileSync (path.join (process.cwd(), fileName), data);  
-
+        name: 'action',
+        message: 'What action would you like to perform?',
+        choices: [
+          'Exit',
+          'View all employees',
+          'View employees by department',
+          'Add employee',
+          'Remove employee',
+          'Update employee role',
+          'View employees by manager',
+          'Update employee manager',
+          
+        ],
+      },
+    ])
+    .then((answers) => {
+      switch (answers.action) {
+        case 'View all employees':
+          viewAllEmployees();
+          break;
+        case 'View employees by department':
+          viewEmployeesByDepartment();
+          break;
+        case 'View employees by manager':
+          viewEmployeesByManager();
+          break;
+        case 'Add employee':
+          addEmployee();
+          break;
+        case 'Remove employee':
+          removeEmployee();
+          break;
+        case 'Update employee role':
+          updateEmployeeRole();
+          break;
+        case 'Update employee manager':
+          updateEmployeeManager();
+          break;
+        case 'Exit':
+          connection.end();
+          break;
+      }
+    });
 }
+
+// Function to view all employees
+function viewAllEmployees() {
+  connection.query(
+    `SELECT e.id, e.first_name, e.last_name, role.title, department.name AS department, role.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager
+    FROM employee e
+    LEFT JOIN role ON e.role_id = role.id
+    LEFT JOIN department ON role.department_id = department.id
+    LEFT JOIN employee m ON e.manager_id = m.id`,
+    (err, results) => {
+      if (err) throw err;
+      console.table(results);
+      main();
+    }
+  );
+}
+
+// Function to view employees by department
+function viewEmployeesByDepartment() {
+  connection.query(
+    `SELECT department.name AS department, e.id, e.first_name, e.last_name, role.title, role.salary
+    FROM employee e
+    LEFT JOIN role ON e.role_id = role.id
+    LEFT JOIN department ON role.department_id = department.id
+    ORDER BY department.name`,
+    (err, results) => {
+      if (err) throw err;
+      console.table(results);
+      main();
+    }
+  );
+}
+
+// Function to view employees by manager
+function viewEmployeesByManager() {
+  connection.query(
+    `SELECT CONCAT(m.first_name, ' ', m.last_name) AS manager, e.id, e.first_name, e.last_name, role.title, department.name AS department, role.salary
+    FROM employee e
+    LEFT JOIN role ON e.role_id = role.id
+    LEFT JOIN department ON role.department_id = department.id
+    LEFT JOIN employee m ON e.manager_id = m.id
+    ORDER BY manager`,
+    (err, results) => {
+      if (err) throw err;
+      console.table(results);
+      main();
+    }
+  );
+}
+
+// Function to add a new employee
+// function addEmployee() {
+//   inquirer
+//     .prompt([
+//       {
+//         type: 'input',
+//         name: 'first_name',
+//         message: "",
+//       }])};
+
+// function writeToFile(fileName, data) {
+//     return fs.writeFileSync (path.join (process.cwd(), fileName), data);  
+
+// }
 
 
 // TODO: Create a function to initialize app
 function init() {
     inquirer.prompt(questions).then((responses) => {
         console.log('Successful! ReadMe generated.');
-        writeToFile('NEWREADME.md', generateMarkdown({
-            ...responses
-        }));
     });
 };
+
 
 // Function call to initialize app
 init();
