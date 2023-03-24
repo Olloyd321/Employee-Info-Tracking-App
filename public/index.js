@@ -5,12 +5,12 @@ const inquirer = require('inquirer');
 const mysql = require('mysql');
 
 // connect to sql?
-const connection = mysql.myNewDb({
-  host: 'localhost',
-  user: 'root',
-  password: 'MyNewDb',
-  database: 'employee_tracker_db',
-});
+// const connection = mysql.myNewDb({
+//   host: 'localhost',
+//   user: 'root',
+//   password: 'MyNewDb',
+//   database: 'employee_tracker_db',
+// });
 
 // Connect to the db
 connection.connect((err) => {
